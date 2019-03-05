@@ -1,7 +1,7 @@
 import requests
 import sys
 import re
-from urllib.parse import quote
+from urllib.parse import quote_plus
 from bs4 import BeautifulSoup
 
 user_id = 'user_id'
@@ -43,7 +43,7 @@ while not done:
             report_content = requests.get(report_url)
             soup = BeautifulSoup(report_content.text, "html.parser")
             payload = str(soup.select(".urls")[0])[18:-6]
-            msg = "[" + name + "](" + report_url + ") ```" + payload + "```"
+            msg = quote_plus("[" + name + "](" + report_url + ") ```" + payload + "```")
             url = "https://api.telegram.org/bot" + bot_token + "/sendMessage?chat_id=" + user_id + "&parse_mode=Markdown&disable_web_page_preview=1&text=" + msg
             requests.get(url)
 with open(log_path, 'a') as f:
